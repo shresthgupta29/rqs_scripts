@@ -105,7 +105,7 @@ pipeline {
 						}
 					}
 				}
-				stage('NodeB's Backup'){
+				stage('NodeBs Backup'){
 					when (expression { ${HA}==true}){
 						stage('App01NodeB'){
 							agent {
@@ -289,7 +289,7 @@ pipeline {
 						'''
 					}
 				}
-				stage ('NodeB's backup'){
+				stage ('NodeBs backup'){
 					when{expression {${HA} == true}
 						stage('App01NodeB Backup'){
 							agent {
@@ -438,7 +438,7 @@ pipeline {
 					}
 				}
 				
-				stage('NodeB's stop servers'){
+				stage('NodeBs stop servers'){
 					when (expression { ${HA}==true}){
 						stage('App01NodeB'){
 							agent {
