@@ -21,16 +21,18 @@ pipeline {
 				}
 			}
 			steps{
-				try{
-					sh '''
-						sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers "recipe[pgbu_reboot_new::stop_servers_V7]"	
-					'''
-				}
-				catch(Exception e){
-					sh '''
-						echo 'Unable to tag stop_servers'
-					'''
-					throw e
+				script {
+					try{
+						sh '''
+							sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers "recipe[pgbu_reboot_new::stop_servers_V7]"	
+						'''
+					}
+					catch(Exception e){
+						sh '''
+							echo 'Unable to tag stop_servers'
+						'''
+						throw e
+					}
 				}
 			}
 		}
@@ -47,13 +49,14 @@ pipeline {
 							cd /tmp
 							chef-client -l debug -L stopServer.log
 						'''
-						
-						try{
-							sh'''
-								ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-							'''
-						}catch(Exception e){
-							throw e
+						script {
+							try{
+								sh'''
+									ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								'''
+							}catch(Exception e){
+								throw e
+							}
 						}
 					}
 				}
@@ -68,13 +71,14 @@ pipeline {
 							cd /tmp
 							chef-client -l debug -L stopServer.log
 						'''
-						
-						try{
-							sh'''
-								ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-							'''
-						}catch(Exception e){
-							throw e
+						script{
+							try{
+								sh'''
+									ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								'''
+							}catch(Exception e){
+								throw e
+							}
 						}
 					}
 				}
@@ -90,12 +94,14 @@ pipeline {
 							chef-client -l debug -L stopServer.log
 						'''
 						
-						try{
-							sh'''
-								ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-							'''
-						}catch(Exception e){
-							throw e
+						script {
+							try{
+								sh'''
+									ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								'''
+							}catch(Exception e){
+								throw e
+							}
 						}
 					}
 				}
@@ -107,17 +113,18 @@ pipeline {
 						
 						steps {
 							sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
-						'''
-						
-						try{
-							sh'''
-								ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								cd /tmp
+								chef-client -l debug -L stopServer.log
 							'''
-						}catch(Exception e){
-							throw e
-						}
+							script {
+								try{
+									sh'''
+										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									'''
+								}catch(Exception e){
+									throw e
+								}
+							}
 						}
 					}
 					
@@ -128,17 +135,18 @@ pipeline {
 						
 						steps {
 							sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
-						'''
-						
-						try{
-							sh'''
-								ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								cd /tmp
+								chef-client -l debug -L stopServer.log
 							'''
-						}catch(Exception e){
-							throw e
-						}
+							script{
+								try{
+									sh'''
+										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									'''
+								}catch(Exception e){
+									throw e
+								}
+							}
 						}
 					}
 					
@@ -149,17 +157,18 @@ pipeline {
 						
 						steps {
 							sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
-						'''
-						
-						try{
-							sh'''
-								ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								cd /tmp
+								chef-client -l debug -L stopServer.log
 							'''
-						}catch(Exception e){
-							throw e
-						}
+							script {		
+								try{
+									sh'''
+										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									'''
+								}catch(Exception e){
+									throw e
+								}
+							}
 						}
 					}
 				}
@@ -177,13 +186,15 @@ pipeline {
 					wget "http://kkm00bme.in.oracle.com:8080/job/Cloud_Automation_BATS/ws/stopDB.py"
 					sudo -H -u gbuora python stopDB.py ${DBCONTAINER} ${DBPLUGGABLE} /u01/app/oracle/
 				'''
-				try{
-					sh'''
-						ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-					'''
-					}catch(Exception e){
-						throw e
-					}
+				script {
+					try{
+						sh'''
+							ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+						'''
+						}catch(Exception e){
+							throw e
+						}
+				}
 			}
 		}
 		
@@ -194,14 +205,16 @@ pipeline {
 						label "$DBDev19"
 					}
 					steps{
-						try{
-							sh'''
-								rm -rf /u02/Backup/DB.tar.gz
-							'''
-							}catch(Exception e){
-								throw e
-							}
-						
+						script{
+							try{
+								sh'''
+									rm -rf /u02/Backup/DB.tar.gz
+								'''
+								}catch(Exception e){
+									throw e
+								}
+						}
+							
 						sh'''
 							cd /u01
 							tar -cvf /u02/Backup/DB.tar.gz app
@@ -214,14 +227,15 @@ pipeline {
 						label "$App01NodeADev19"
 					}
 					steps{
-						try{
-							sh'''
-								rm -rf /u02/Backup/App01NodeA.tar.gz
-							'''
-							}catch(Exception e){
-								throw e
-							}
-						
+						script{	
+							try{
+								sh'''
+									rm -rf /u02/Backup/App01NodeA.tar.gz
+								'''
+								}catch(Exception e){
+									throw e
+								}
+						}
 						sh'''
 							cd /u01
 							tar -cvf /u02/Backup/App01NodeA.tar.gz app
@@ -234,13 +248,15 @@ pipeline {
 						label "$App02NodeADev19"
 					}
 					steps{
-						try{
-							sh'''
-								rm -rf /u02/Backup/App02NodeA.tar.gz
-							'''
-							}catch(Exception e){
-								throw e
-							}
+						script{
+							try{
+								sh'''
+									rm -rf /u02/Backup/App02NodeA.tar.gz
+								'''
+								}catch(Exception e){
+									throw e
+								}
+						}
 						
 						sh'''
 							cd /u01
@@ -254,15 +270,18 @@ pipeline {
 						label "$IDMNodeADev19"
 					}
 					steps{
-						try{
-							sh'''
-								rm -rf /u02/Backup/IDMNodeA.tar.gz
-							'''
-							}catch(Exception e){
-								throw e
-							}
+					
+						script{
+							try{
+								sh'''
+									rm -rf /u02/Backup/IDMNodeA.tar.gz
+								'''
+								}catch(Exception e){
+									throw e
+								}
+						}
 						
-						sh'''
+						sh '''
 							cd /u01
 							tar -cvf /u02/Backup/IDMNodeA.tar.gz app
 						'''
@@ -274,14 +293,15 @@ pipeline {
 							label "$App01NodeBDev19"
 						}
 						steps{
-							try{
-								sh'''
-									rm -rf /u02/Backup/App01NodeB.tar.gz
-								'''
-								}catch(Exception e){
-									throw e
-								}
-							
+							script{	
+								try{
+									sh'''
+										rm -rf /u02/Backup/App01NodeB.tar.gz
+									'''
+									}catch(Exception e){
+										throw e
+									}
+							}
 							sh'''
 								cd /u01
 								tar -cvf /u02/Backup/App01NodeB.tar.gz app
@@ -295,14 +315,15 @@ pipeline {
 							label "$App02NodeBDev19"
 						}
 						steps{
-							try{
-								sh'''
-									rm -rf /u02/Backup/App02NodeB.tar.gz
-								'''
-								}catch(Exception e){
-									throw e
-								}
-							
+							script{
+								try{
+									sh'''
+										rm -rf /u02/Backup/App02NodeB.tar.gz
+									'''
+									}catch(Exception e){
+										throw e
+									}
+							}	
 							sh'''
 								cd /u01
 								tar -cvf /u02/Backup/App02NodeB.tar.gz app
@@ -314,14 +335,15 @@ pipeline {
 							label "$IDMNodeBDev19"
 						}
 						steps{
-							try{
-								sh'''
-									rm -rf /u02/Backup/IDMNodeB.tar.gz
-								'''
-								}catch(Exception e){
-									throw e
-								}
-							
+							script{
+								try{
+									sh'''
+										rm -rf /u02/Backup/IDMNodeB.tar.gz
+									'''
+									}catch(Exception e){
+										throw e
+									}
+							}	
 							sh'''
 								cd /u01
 								tar -cvf /u02/Backup/IDMNodeB.tar.gz app
@@ -352,16 +374,18 @@ pipeline {
 				}
 			}
 			steps{
-				try{
-					sh '''
-						sudo -S /u01/workstation/chef-repo/knife_tag_delete_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers
-						sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} start_servers "recipe[pgbu_reboot_new::start_servers_V7]" 
-					'''
-				}
-				catch(Exception e){
-					sh '''
-						echo 'Unable to tag start_servers'
-					'''
+				script{
+					try{
+						sh '''
+							sudo -S /u01/workstation/chef-repo/knife_tag_delete_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers
+							sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} start_servers "recipe[pgbu_reboot_new::start_servers_V7]" 
+						'''
+					}
+					catch(Exception e){
+						sh '''
+							echo 'Unable to tag start_servers'
+						'''
+					}
 				}
 			}
 		}
