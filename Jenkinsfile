@@ -268,7 +268,7 @@ pipeline {
 						'''
 					}
 				}
-				when{expression {${HA} = true}
+				when{expression {${HA} == true}
 					stage('App01NodeB Backup'){
 						agent {
 							label "$App01NodeBDev19"
