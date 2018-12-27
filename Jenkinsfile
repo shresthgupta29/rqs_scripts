@@ -358,9 +358,11 @@ pipeline {
 						sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} start_servers "recipe[pgbu_reboot_new::start_servers_V7]" 
 					'''
 				}
-				catch(Exception e)
+				catch(Exception e){
 					sh '''
 						echo 'Unable to tag start_servers'
+					'''
+				}
 			}
 		}
 		
