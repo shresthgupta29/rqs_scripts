@@ -3,7 +3,7 @@ pipeline {
 	
 	parameters {
 		string (name: 'ENV_NAME', defaultValue: 'Dev19', description: 'Which environment to be used ?')
-		string (name : 'HOST_LIST', defaultValue:'hostlist_dev_2', description: 'File name for the hostlist' ?)
+		string (name : 'HOST_LIST', defaultValue:'hostlist_dev_2', description: 'File name for the hostlist?' )
 		string (name : 'HA', defaultValue:'false',description:'HA true/false ?')
 		stirng (name : 'DBCONTAINER', defaultValue:'cdb882',description:'Container DB Name ?')
 		stirng (name : 'DBPLUGGABLE', defaultValue:'pdb882',description:'Pluggable DB Name ?')
