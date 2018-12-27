@@ -105,7 +105,7 @@ pipeline {
 						}
 					}
 				}
-				stage ('NodeB's Backup'){
+				stage('NodeB's Backup'){
 					when (expression { ${HA}==true}){
 						stage('App01NodeB'){
 							agent {
