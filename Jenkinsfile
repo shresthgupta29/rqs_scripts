@@ -5,8 +5,8 @@ pipeline {
 		string (name: 'ENV_NAME', defaultValue: 'Dev19', description: 'Which environment to be used ?')
 		string (name : 'HOST_LIST', defaultValue:'hostlist_dev_2', description: 'File name for the hostlist ?')
 		string (name : 'HA', defaultValue:'false',description:'HA true/false ?')
-		stirng (name : 'DBCONTAINER', defaultValue:'cdb882',description:'Container DB Name ?')
-		stirng (name : 'DBPLUGGABLE', defaultValue:'pdb882',description:'Pluggable DB Name ?')
+		string (name : 'DBCONTAINER', defaultValue:'cdb882',description:'Container DB Name ?')
+		string (name : 'DBPLUGGABLE', defaultValue:'pdb882',description:'Pluggable DB Name ?')
 	}
 	
 	options {
@@ -105,68 +105,70 @@ pipeline {
 						}
 					}
 				}
-				when (expression { ${HA}==true}){
-					stage('App01NodeB'){
-						agent {
-							label "${App01NodeBDev19}"
-						}
-						
-						steps {
-							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
-							'''
-							script {
-								try{
-									sh'''
-										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-									'''
-								}catch(Exception e){
-									throw e
+				stage ('NodeB's Backup'){
+					when (expression { ${HA}==true}){
+						stage('App01NodeB'){
+							agent {
+								label "${App01NodeBDev19}"
+							}
+							
+							steps {
+								sh '''
+									cd /tmp
+									chef-client -l debug -L stopServer.log
+								'''
+								script {
+									try{
+										sh'''
+											ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										'''
+									}catch(Exception e){
+										throw e
+									}
 								}
 							}
 						}
-					}
-					
-					stage('App02NodeB'){
-						agent {
-							label "${App01NodeBDev19}"
-						}
 						
-						steps {
-							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
-							'''
-							script{
-								try{
-									sh'''
-										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-									'''
-								}catch(Exception e){
-									throw e
+						stage('App02NodeB'){
+							agent {
+								label "${App01NodeBDev19}"
+							}
+							
+							steps {
+								sh '''
+									cd /tmp
+									chef-client -l debug -L stopServer.log
+								'''
+								script{
+									try{
+										sh'''
+											ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										'''
+									}catch(Exception e){
+										throw e
+									}
 								}
 							}
 						}
-					}
-					
-					stage('IDMNodeB'){
-						agent {
-							label "${IDMNodeBDev19}"
-						}
 						
-						steps {
-							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
-							'''
-							script {		
-								try{
-									sh'''
-										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-									'''
-								}catch(Exception e){
-									throw e
+						stage('IDMNodeB'){
+							agent {
+								label "${IDMNodeBDev19}"
+							}
+							
+							steps {
+								sh '''
+									cd /tmp
+									chef-client -l debug -L stopServer.log
+								'''
+								script {		
+									try{
+										sh'''
+											ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										'''
+									}catch(Exception e){
+										throw e
+									}
 								}
 							}
 						}
@@ -287,67 +289,69 @@ pipeline {
 						'''
 					}
 				}
-				when{expression {${HA} == true}
-					stage('App01NodeB Backup'){
-						agent {
-							label "$App01NodeBDev19"
-						}
-						steps{
-							script{	
-								try{
-									sh'''
-										rm -rf /u02/Backup/App01NodeB.tar.gz
-									'''
-									}catch(Exception e){
-										throw e
-									}
+				stage ('NodeB's backup'){
+					when{expression {${HA} == true}
+						stage('App01NodeB Backup'){
+							agent {
+								label "$App01NodeBDev19"
 							}
-							sh'''
-								cd /u01
-								tar -cvf /u02/Backup/App01NodeB.tar.gz app
-							'''
+							steps{
+								script{	
+									try{
+										sh'''
+											rm -rf /u02/Backup/App01NodeB.tar.gz
+										'''
+										}catch(Exception e){
+											throw e
+										}
+								}
+								sh'''
+									cd /u01
+									tar -cvf /u02/Backup/App01NodeB.tar.gz app
+								'''
+							}
 						}
-					}
-					
-					
-					stage('App02NodeB Backup'){
-						agent {
-							label "$App02NodeBDev19"
+						
+						
+						stage('App02NodeB Backup'){
+							agent {
+								label "$App02NodeBDev19"
+							}
+							steps{
+								script{
+									try{
+										sh'''
+											rm -rf /u02/Backup/App02NodeB.tar.gz
+										'''
+										}catch(Exception e){
+											throw e
+										}
+								}	
+								sh'''
+									cd /u01
+									tar -cvf /u02/Backup/App02NodeB.tar.gz app
+								'''
+							}
 						}
-						steps{
-							script{
-								try{
-									sh'''
-										rm -rf /u02/Backup/App02NodeB.tar.gz
-									'''
-									}catch(Exception e){
-										throw e
-									}
-							}	
-							sh'''
-								cd /u01
-								tar -cvf /u02/Backup/App02NodeB.tar.gz app
-							'''
-						}
-					}
-					stage('IDMNodeB Backup'){
-						agent {
-							label "$IDMNodeBDev19"
-						}
-						steps{
-							script{
-								try{
-									sh'''
-										rm -rf /u02/Backup/IDMNodeB.tar.gz
-									'''
-									}catch(Exception e){
-										throw e
-									}
-							}	
-							sh'''
-								cd /u01
-								tar -cvf /u02/Backup/IDMNodeB.tar.gz app
-							'''
+						stage('IDMNodeB Backup'){
+							agent {
+								label "$IDMNodeBDev19"
+							}
+							steps{
+								script{
+									try{
+										sh'''
+											rm -rf /u02/Backup/IDMNodeB.tar.gz
+										'''
+										}catch(Exception e){
+											throw e
+										}
+								}	
+								sh'''
+									cd /u01
+									tar -cvf /u02/Backup/IDMNodeB.tar.gz app
+								'''
+							}
 						}
 					}
 				}
@@ -433,46 +437,49 @@ pipeline {
 						
 					}
 				}
-				when (expression { ${HA}==true}){
-					stage('App01NodeB'){
-						agent {
-							label ${App01NodeBDev19}
+				
+				stage('NodeB's stop servers'){
+					when (expression { ${HA}==true}){
+						stage('App01NodeB'){
+							agent {
+								label ${App01NodeBDev19}
+							}
+							
+							steps {
+								sh '''
+									cd /tmp
+									chef-client -l debug -L stopServer.log
+								'''
+									
+							}
 						}
 						
-						steps {
-							sh '''
+						stage('App02NodeB'){
+							agent {
+								label ${App02NodeBDev19}
+							}
+							
+							steps {
+								sh '''
 								cd /tmp
 								chef-client -l debug -L stopServer.log
 							'''
-								
-						}
-					}
-					
-					stage('App02NodeB'){
-						agent {
-							label ${App02NodeBDev19}
+												
+							}
 						}
 						
-						steps {
-							sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
-						'''
-											
-						}
-					}
-					
-					stage('IDMNodeB'){
-						agent {
-							label ${IDMNodeBDev19}
-						}
-						
-						steps {
-							sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
-						'''
-						
+						stage('IDMNodeB'){
+							agent {
+								label ${IDMNodeBDev19}
+							}
+							
+							steps {
+								sh '''
+								cd /tmp
+								chef-client -l debug -L stopServer.log
+							'''
+							
+							}
 						}
 					}
 				}
