@@ -274,7 +274,6 @@ pipeline {
 						label "$IDMNodeADev19"
 					}
 					steps{
-						when
 						script{
 							try{
 								sh'''
