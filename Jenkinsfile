@@ -35,7 +35,7 @@ pipeline {
 				script {
 					try{
 						sh '''
-							sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers "recipe[pgbu_reboot_new::stop_servers_V7]"	
+							echo "Coldplay@123" | sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers "recipe[pgbu_reboot_new::stop_servers_V7]"	
 						'''
 					}
 					catch(Exception e){
@@ -417,8 +417,8 @@ pipeline {
 				script{
 					try{
 						sh '''
-							sudo -S /u01/workstation/chef-repo/knife_tag_delete_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers
-							sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} start_servers "recipe[pgbu_reboot_new::start_servers_V7]" 
+							echo "Coldplay@123" | sudo -S /u01/workstation/chef-repo/knife_tag_delete_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers
+							echo "Coldplay@123" | sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} start_servers "recipe[pgbu_reboot_new::start_servers_V7]" 
 						'''
 					}
 					catch(Exception e){
