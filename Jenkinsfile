@@ -106,72 +106,76 @@ pipeline {
 					}
 				}
 				stage('NodeBs Backup'){
-					when (expression { ${HA}==true}){
+					parallel{
+						
 						stage('App01NodeB'){
-							agent {
-								label "${App01NodeBDev19}"
-							}
-							
-							steps {
-								sh '''
-									cd /tmp
-									chef-client -l debug -L stopServer.log
-								'''
-								script {
-									try{
-										sh'''
-											ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								agent {
+									label "${App01NodeBDev19}"
+								}
+								when (expression { ${HA}==true}){
+									steps {
+										sh '''
+											cd /tmp
+											chef-client -l debug -L stopServer.log
 										'''
-									}catch(Exception e){
-										throw e
+										script {
+											try{
+												sh'''
+													ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+												'''
+											}catch(Exception e){
+												throw e
+											}
+										}
 									}
 								}
 							}
-						}
-						
+							
 						stage('App02NodeB'){
-							agent {
-								label "${App01NodeBDev19}"
-							}
-							
-							steps {
-								sh '''
-									cd /tmp
-									chef-client -l debug -L stopServer.log
-								'''
-								script{
-									try{
-										sh'''
-											ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+								agent {
+									label "${App01NodeBDev19}"
+								}
+								when (expression { ${HA}==true}){
+									steps {
+										sh '''
+											cd /tmp
+											chef-client -l debug -L stopServer.log
 										'''
-									}catch(Exception e){
-										throw e
+										script{
+											try{
+												sh'''
+													ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+												'''
+											}catch(Exception e){
+												throw e
+											}
+										}
 									}
 								}
 							}
-						}
-						
+							
 						stage('IDMNodeB'){
-							agent {
-								label "${IDMNodeBDev19}"
-							}
-							
-							steps {
-								sh '''
-									cd /tmp
-									chef-client -l debug -L stopServer.log
-								'''
-								script {		
-									try{
-										sh'''
-											ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
-										'''
-									}catch(Exception e){
-										throw e
-									}
+								agent {
+									label "${IDMNodeBDev19}"
 								}
+								when (expression { ${HA}==true}){
+									steps {
+										sh '''
+											cd /tmp
+											chef-client -l debug -L stopServer.log
+										'''
+										script {		
+											try{
+												sh'''
+													ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+												'''
+											}catch(Exception e){
+												throw e
+											}
+										}
+									}
+								
 							}
-						}
 					}
 				}
 			}
