@@ -446,7 +446,7 @@ pipeline {
 					when (expression { ${HA}==true}){
 						stage('App01NodeB'){
 							agent {
-								label ${App01NodeBDev19}
+								label "${App01NodeBDev19}"
 							}
 							
 							steps {
@@ -460,7 +460,7 @@ pipeline {
 						
 						stage('App02NodeB'){
 							agent {
-								label ${App02NodeBDev19}
+								label "${App02NodeBDev19}"
 							}
 							
 							steps {
@@ -474,7 +474,7 @@ pipeline {
 						
 						stage('IDMNodeB'){
 							agent {
-								label ${IDMNodeBDev19}
+								label "${IDMNodeBDev19}"
 							}
 							
 							steps {
