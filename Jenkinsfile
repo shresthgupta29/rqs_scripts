@@ -1,4 +1,4 @@
-def CHEF-WORKSTATION='CHEF-WORKSTATION'
+def CHEF_WORKSTATION='CHEF-WORKSTATION'
 pipeline {
 	agent none
 
@@ -20,7 +20,7 @@ pipeline {
 		stage('Tagging the nodes with stop_server tag'){
 			agent{
 				node{
-					label "${CHEF-WORKSTATION}"
+					label "${CHEF_WORKSTATION}"
 				}
 			}
 			steps{
@@ -275,6 +275,7 @@ pipeline {
 						label "$IDMNodeADev19"
 					}
 					steps{
+						
 						script{
 							try{
 								sh'''
@@ -379,7 +380,7 @@ pipeline {
 		stage('Tagging the nodes with start_server tag'){
 			agent{
 				node{
-					label "$CHEF-WORKSTATION"
+					label "$CHEF_WORKSTATION"
 				}
 			}
 			steps{
