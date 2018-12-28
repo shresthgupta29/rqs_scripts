@@ -36,6 +36,7 @@ pipeline {
 					try{
 						sh '''
 							echo "Coldplay@123" | sudo -S /u01/workstation/chef-repo/knife_tag_assign_role.sh /u01/workstation/chef-repo/${HOST_LIST} stop_servers "recipe[pgbu_reboot_new::stop_servers_V7]"	
+							echo $pwd
 						'''
 					}
 					catch(Exception e){
