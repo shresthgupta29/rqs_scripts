@@ -112,8 +112,8 @@ pipeline {
 					agent {
 						label "${App01NodeBDev19}"
 					}
-					when (expression { ${HA}==true}){
-						steps {
+					steps {
+						when (expression { ${HA}==true}){
 							sh '''
 								cd /tmp
 								chef-client -l debug -L stopServer.log
@@ -135,8 +135,8 @@ pipeline {
 					agent {
 						label "${App01NodeBDev19}"
 					}
-					when (expression { ${HA}==true}){
-						steps {
+					steps {
+						when (expression { ${HA}==true}){
 							sh '''
 								cd /tmp
 								chef-client -l debug -L stopServer.log
@@ -158,8 +158,8 @@ pipeline {
 					agent {
 						label "${IDMNodeBDev19}"
 					}
-					when (expression { ${HA}==true}){
-						steps {
+					steps{
+						when (expression { ${HA}==true}){
 							sh '''
 								cd /tmp
 								chef-client -l debug -L stopServer.log
