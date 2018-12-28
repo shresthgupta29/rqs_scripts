@@ -1,3 +1,4 @@
+def CHEF-WORKSTATION='CHEF-WORKSTATION'
 pipeline {
 	agent none
 
