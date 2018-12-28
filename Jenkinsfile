@@ -1,4 +1,12 @@
 def CHEF_WORKSTATION='CHEF-WORKSTATION'
+def App01NodeADev19 = 'App01NodeADev19'
+def App01NodeBDev19 = 'App01NodeBDev19'
+def App02NodeADev19 = 'App02NodeADev19'
+def App02NodeBDev19 = 'App02NodeBDev19'
+def IDMNodeADev19 = 'IDMNodeADev19'
+def IDMNodeBDev19 = 'IDMNodeBDev19'
+def DBDev19 = 'DBDev19'
+
 pipeline {
 	agent none
 
