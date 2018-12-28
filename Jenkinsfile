@@ -57,13 +57,15 @@ pipeline {
 					
 					steps {
 						sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
+							//cd /tmp
+							//chef-client -l debug -L stopServer.log
+							echo "running stop server chef-client in App01NodeA"
 						'''
 						script {
 							try{
 								sh'''
-									ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									echo "Killing /u01 processes in App01NodeA"
 								'''
 							}catch(Exception e){
 								throw e
@@ -79,13 +81,15 @@ pipeline {
 					
 					steps {
 						sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
+							//cd /tmp
+							//chef-client -l debug -L stopServer.log
+							echo "running stop server chef-client in App02NodeA"
 						'''
 						script{
 							try{
 								sh'''
-									ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									echo "Killing /u01 processes in App02NodeA"
 								'''
 							}catch(Exception e){
 								throw e
@@ -101,14 +105,16 @@ pipeline {
 					
 					steps {
 						sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
+							//cd /tmp
+							//chef-client -l debug -L stopServer.log
+							echo "running stop server chef-client in IDMNodeA"
 						'''
 						
 						script {
 							try{
 								sh'''
-									ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+									echo "Killing /u01 processes in IDMNodeA"
 								'''
 							}catch(Exception e){
 								throw e
@@ -124,13 +130,15 @@ pipeline {
 					steps {
 						when (expression { ${HA}==true}){
 							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
+								//cd /tmp
+								//chef-client -l debug -L stopServer.log
+								echo "running stop server chef-client in IDMNodeA"
 							'''
 							script {
 								try{
 									sh'''
-										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										echo "Killing /u01 processes in App01NodeB"
 									'''
 								}catch(Exception e){
 									throw e
@@ -147,13 +155,15 @@ pipeline {
 					steps {
 						when (expression { ${HA}==true}){
 							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
+								//cd /tmp
+								//chef-client -l debug -L stopServer.log
+								echo "running stop server chef-client in App02NodeB"
 							'''
 							script{
 								try{
 									sh'''
-										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										echo "Killing /u01 processes in App02NodeB"
 									'''
 								}catch(Exception e){
 									throw e
@@ -170,13 +180,15 @@ pipeline {
 					steps{
 						when (expression { ${HA}==true}){
 							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
+								//cd /tmp
+								//chef-client -l debug -L stopServer.log
+								echo "running stop server chef-client in IDMNodeB"
 							'''
 							script {		
 								try{
 									sh'''
-										ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+										echo "Killing /u01 processes in IDMNodeB"
 									'''
 								}catch(Exception e){
 									throw e
@@ -194,15 +206,17 @@ pipeline {
 			}
 			steps{
 				sh'''
-					cd /u01/
-					rm -rf stopDB.py   || true
-					wget "http://kkm00bme.in.oracle.com:8080/job/Cloud_Automation_BATS/ws/stopDB.py"
-					sudo -H -u gbuora python stopDB.py ${DBCONTAINER} ${DBPLUGGABLE} /u01/app/oracle/
+					//cd /u01/
+					//rm -rf stopDB.py   || true
+					//wget "http://kkm00bme.in.oracle.com:8080/job/Cloud_Automation_BATS/ws/stopDB.py"
+					//sudo -H -u gbuora python stopDB.py ${DBCONTAINER} ${DBPLUGGABLE} /u01/app/oracle/
+					echo "Stopping database"
 				'''
 				script {
 					try{
 						sh'''
-							ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+							//ps aux | grep /u01/app | awk \'{print $2}\' | xargs kill -9
+							echo "Killing /u01 processes in DB"
 						'''
 						}catch(Exception e){
 							throw e
@@ -221,7 +235,7 @@ pipeline {
 						script{
 							try{
 								sh'''
-									rm -rf /u02/Backup/DB.tar.gz
+									//rm -rf /u02/Backup/DB.tar.gz
 								'''
 								}catch(Exception e){
 									throw e
@@ -229,8 +243,9 @@ pipeline {
 						}
 							
 						sh'''
-							cd /u01
-							tar -cvf /u02/Backup/DB.tar.gz app
+							//cd /u01
+							//tar -cvf /u02/Backup/DB.tar.gz app
+							echo "Taking db backup"
 						'''
 					}
 				}
@@ -243,15 +258,16 @@ pipeline {
 						script{	
 							try{
 								sh'''
-									rm -rf /u02/Backup/App01NodeA.tar.gz
+									//rm -rf /u02/Backup/App01NodeA.tar.gz
 								'''
 								}catch(Exception e){
 									throw e
 								}
 						}
 						sh'''
-							cd /u01
-							tar -cvf /u02/Backup/App01NodeA.tar.gz app
+							//cd /u01
+							//tar -cvf /u02/Backup/App01NodeA.tar.gz app
+							echo "taking backup app01NodeA"
 						'''
 					}
 				}
@@ -264,7 +280,7 @@ pipeline {
 						script{
 							try{
 								sh'''
-									rm -rf /u02/Backup/App02NodeA.tar.gz
+									//rm -rf /u02/Backup/App02NodeA.tar.gz
 								'''
 								}catch(Exception e){
 									throw e
@@ -272,8 +288,9 @@ pipeline {
 						}
 						
 						sh'''
-							cd /u01
-							tar -cvf /u02/Backup/App02NodeA.tar.gz app
+							//cd /u01
+							//tar -cvf /u02/Backup/App02NodeA.tar.gz app
+							echo "taking backup app02NodeA"
 						'''
 					}
 				}
@@ -287,7 +304,7 @@ pipeline {
 						script{
 							try{
 								sh'''
-									rm -rf /u02/Backup/IDMNodeA.tar.gz
+									//rm -rf /u02/Backup/IDMNodeA.tar.gz
 								'''
 								}catch(Exception e){
 									throw e
@@ -295,8 +312,9 @@ pipeline {
 						}
 						
 						sh '''
-							cd /u01
-							tar -cvf /u02/Backup/IDMNodeA.tar.gz app
+							//cd /u01
+							//tar -cvf /u02/Backup/IDMNodeA.tar.gz app
+							echo "taking backup IDMNodeA"
 						'''
 					}
 				}
@@ -310,15 +328,16 @@ pipeline {
 							script{	
 								try{
 									sh'''
-										rm -rf /u02/Backup/App01NodeB.tar.gz
+										//rm -rf /u02/Backup/App01NodeB.tar.gz
 									'''
 									}catch(Exception e){
 										throw e
 									}
 							}
 							sh'''
-								cd /u01
-								tar -cvf /u02/Backup/App01NodeB.tar.gz app
+								//cd /u01
+								//tar -cvf /u02/Backup/App01NodeB.tar.gz app
+								echo "taking backup app01NodeB"
 							'''
 						}
 					}
@@ -334,15 +353,16 @@ pipeline {
 							script{
 								try{
 									sh'''
-										rm -rf /u02/Backup/App02NodeB.tar.gz
+										//rm -rf /u02/Backup/App02NodeB.tar.gz
 									'''
 									}catch(Exception e){
 										throw e
 									}
 							}	
 							sh'''
-								cd /u01
-								tar -cvf /u02/Backup/App02NodeB.tar.gz app
+								//cd /u01
+								//tar -cvf /u02/Backup/App02NodeB.tar.gz app
+								echo "taking backup app02NodeB"
 							'''
 						}
 					}
@@ -356,15 +376,16 @@ pipeline {
 							script{
 								try{
 									sh'''
-										rm -rf /u02/Backup/IDMNodeB.tar.gz
+										//rm -rf /u02/Backup/IDMNodeB.tar.gz
 									'''
 									}catch(Exception e){
 										throw e
 									}
 							}	
 							sh'''
-								cd /u01
-								tar -cvf /u02/Backup/IDMNodeB.tar.gz app
+								//cd /u01
+								//tar -cvf /u02/Backup/IDMNodeB.tar.gz app
+								echo "taking backup idmNodeB"
 							'''
 						}
 					}
@@ -377,10 +398,11 @@ pipeline {
 			}
 			steps{
 				sh'''
-					cd /u01/
-					rm -rf startDB.py   || true
-					wget "http://kkm00bme.in.oracle.com:8080/job/Cloud_Automation_BATS/ws/startDB.py"
-					sudo -H -u gbuora python startDB.py ${DBCONTAINER} ${DBPLUGGABLE} /u01/app/oracle/
+					//cd /u01/
+					//rm -rf startDB.py   || true
+					//wget "http://kkm00bme.in.oracle.com:8080/job/Cloud_Automation_BATS/ws/startDB.py"
+					//sudo -H -u gbuora python startDB.py ${DBCONTAINER} ${DBPLUGGABLE} /u01/app/oracle/
+					echo "Starting db"
 				'''
 			}
 		}
@@ -417,8 +439,9 @@ pipeline {
 					
 					steps {
 						sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
+							//cd /tmp
+							//chef-client -l debug -L startServer.log
+							echo "running start server chef-client App01NodeA"
 						'''
 						
 					}
@@ -431,8 +454,9 @@ pipeline {
 					
 					steps {
 						sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
+							//cd /tmp
+							//chef-client -l debug -L startServer.log
+							echo "running start server chef-client App02NodeA"
 						'''
 						
 					}
@@ -440,13 +464,14 @@ pipeline {
 				
 				stage('IDMNodeA'){
 					agent {
-						label "${App01NodeADev19}"
+						label "${IDMNodeADev19}"
 					}
 					
 					steps {
 						sh '''
-							cd /tmp
-							chef-client -l debug -L stopServer.log
+							//cd /tmp
+							//chef-client -l debug -L startServer.log
+							echo "running start server chef-client idmNodeA"
 						'''
 						
 					}
@@ -460,8 +485,9 @@ pipeline {
 					steps {
 						when (expression { ${HA}==true}){
 							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
+								//cd /tmp
+								//chef-client -l debug -L stopServer.log
+								echo "running start server chef-client App01NodeB"
 							'''
 						}
 					}
@@ -474,8 +500,9 @@ pipeline {
 					steps {
 						when (expression { ${HA}==true}){
 							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
+								//cd /tmp
+								//chef-client -l debug -L stopServer.log
+								echo "running start server chef-client App02NodeB"
 							'''
 						}				
 					}
@@ -489,8 +516,9 @@ pipeline {
 					steps {
 						when (expression { ${HA}==true}){
 							sh '''
-								cd /tmp
-								chef-client -l debug -L stopServer.log
+								//cd /tmp
+								//chef-client -l debug -L stopServer.log
+								echo "running start server chef-client IDMNodeB"
 							'''
 						}
 					}
